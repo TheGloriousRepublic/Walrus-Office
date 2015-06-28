@@ -2,6 +2,7 @@ import Tkinter as tk
 import tkFileDialog
 from ScrolledText import ScrolledText
 
+clipboard = ''
 class textpad(tk.Tk):
     def __init__(self, *args, **kwargs):
         tk.Tk.__init__(self, *args, **kwargs)
@@ -28,20 +29,24 @@ class textpad(tk.Tk):
         self.editmenu.add_command(label='Paste', command=self.pastetext)
         self.menubar.add_cascade(label='Edit', menu=self.editmenu)
 
-        self.st.bind('<Button-3>', self.rclick)
+        self.st.bind('<ButtonRelease-3>', self.rclick)
+        self.st.bind('<Control-c>', self.copytext)
+        self.st.bind('<Control-x>', self.cuttext)
+        self.st.bind('<Control-g>', self.gluetext)
+        self.st.bind('<Control-v>', self.pastetext)
 
         self.config(menu=self.menubar)
     
     def savefile(self, *args, **kwargs):
         if self.fileloc:
-            open(self.fileloc, 'w+').write(self.gettext())
+            open(self.fileloc, 'w+').write(self.getcontent())
         else:
             self.fileloc = self.getsavefname()
-            open(self.fileloc, 'w+').write(self.gettext())
+            open(self.fileloc, 'w+').write(self.getcontent())
 
     def savefileas(self, *args, **kwargs):
         self.fileloc = self.getsavefname()
-        open(self.fileloc, 'w+').write(self.gettext())
+        open(self.fileloc, 'w+').write(self.getcontent())
 
     def openfile(self, *args, **kwargs):
         self.settext(open(self.getopenfname()).read())
@@ -53,8 +58,11 @@ class textpad(tk.Tk):
     def cleartext(self):
         self.st.delete('1.0', 'end')
 
-    def gettext(self):
+    def getcontent(self):
         return self.st.get('1.0', 'end')
+
+    def getselected(self):
+        return self.st.get('SEL_FIRST', 'SEL_LAST')
     
     def new(self, *args, **kwargs):
         pass
@@ -65,19 +73,23 @@ class textpad(tk.Tk):
     def getopenfname(self):
         return tkFileDialog.askopenfilename()
 
-    def cuttext(self):
-        pass
+    def cuttext(self, *args):
+        global clipboard
+        clipboard = self.getselected()
+        self.st.delete('SEL_FIRST', 'SEL_LAST')
 
-    def copytext(self):
-        pass
+    def copytext(self, *args):
+        global clipboard
+        clipboard = self.getselected()
 
-    def pastetext(self):
-        pass
+    def pastetext(self, *args):
+        global clipboard
+        self.st.insert('INSERT', clipboard)
 
-    def gluetext(self):
-        pass
+    def gluetext(self, *args):
+        clipboard += self.getselected()
 
-    def pastetext(self):
+    def pastetext(self, *args):
         pass
 
     def rclick(self, event):
