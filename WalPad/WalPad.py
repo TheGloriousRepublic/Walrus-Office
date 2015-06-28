@@ -13,11 +13,22 @@ class textpad(tk.Tk):
         self.menubar = tk.Menu(self)
         
         self.filemenu = tk.Menu(self)
-        self.filemenu.add_command(label="New Window", command=self.new)
-        self.filemenu.add_command(label="Save", command=self.savefile)
-        self.filemenu.add_command(label="Save As", command=self.savefileas)
-        self.filemenu.add_command(label="Open", command=self.openfile)
-        self.menubar.add_cascade(label="File", menu=self.filemenu)
+        self.filemenu.add_command(label='New Window', command=self.new)
+        self.filemenu.add_command(label='Save', command=self.savefile)
+        self.filemenu.add_command(label='Save As', command=self.savefileas)
+        self.filemenu.add_command(label='Open', command=self.openfile)
+        self.menubar.add_cascade(label='File', menu=self.filemenu)
+
+        self.editmenu = tk.Menu(self)
+        self.editmenu.add_command(label='Undo')
+        self.editmenu.add_command(label='Redo')
+        self.editmenu.add_command(label='Cut', command=self.cuttext)
+        self.editmenu.add_command(label='Copy', command=self.copytext)
+        self.editmenu.add_command(label='Glue', command=self.gluetext)
+        self.editmenu.add_command(label='Paste', command=self.pastetext)
+        self.menubar.add_cascade(label='Edit', menu=self.editmenu)
+
+        self.st.bind('<Button-3>', self.rclick)
 
         self.config(menu=self.menubar)
     
@@ -53,6 +64,24 @@ class textpad(tk.Tk):
 
     def getopenfname(self):
         return tkFileDialog.askopenfilename()
+
+    def cuttext(self):
+        pass
+
+    def copytext(self):
+        pass
+
+    def pastetext(self):
+        pass
+
+    def gluetext(self):
+        pass
+
+    def pastetext(self):
+        pass
+
+    def rclick(self, event):
+        self.editmenu.post(event.x_root, event.y_root)
 
 t = textpad()
 
