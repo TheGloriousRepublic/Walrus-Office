@@ -25,15 +25,15 @@ class textpad(tk.Tk):
         if self.fileloc:
             open(self.fileloc, 'w+').write(self.gettext())
         else:
-            self.getfname()
+            self.fileloc = tkFileDialog.asksaveasfilename()
             open(self.fileloc, 'w+').write(self.gettext())
 
     def savefileas(self, *args, **kwargs):
-        self.getfname()
+        self.fileloc = tkFileDialog.asksaveasfilename()
         open(self.fileloc, 'w+').write(self.gettext())
 
     def openfile(self, *args, **kwargs):
-        self.settext(open(self.fileloc).read())
+        self.settext(open(tkFileDialog.asksaveasfilename()).read())
 
     def settext(self, text):
         self.cleartext
@@ -47,9 +47,6 @@ class textpad(tk.Tk):
     
     def new(self, *args, **kwargs):
         pass
-
-    def getfname(self):
-        self.fileloc = tkFileDialog.askopenfilename()
 
 t = textpad()
 
