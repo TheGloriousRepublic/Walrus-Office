@@ -1,4 +1,5 @@
 import Tkinter as tk
+import tkFileDialog
 from ScrolledText import ScrolledText
 
 class textpad(tk.Tk):
@@ -7,6 +8,8 @@ class textpad(tk.Tk):
         self.st = ScrolledText()
         self.st.pack()
 
+        self.fileloc = None
+        
         self.menubar = tk.Menu(self)
         
         self.filemenu = tk.Menu(self)
@@ -19,16 +22,34 @@ class textpad(tk.Tk):
         self.config(menu=self.menubar)
     
     def savefile(self, *args, **kwargs):
-        pass
+        if self.fileloc:
+            open(self.fileloc, 'w+').write(self.gettext())
+        else:
+            self.getfname()
+            open(self.fileloc, 'w+').write(self.gettext())
 
     def savefileas(self, *args, **kwargs):
-        pass
+        self.getfname()
+        open(self.fileloc, 'w+').write(self.gettext())
 
     def openfile(self, *args, **kwargs):
-        pass
+        self.settext(open(self.fileloc).read())
 
+    def settext(self, text):
+        self.cleartext
+        self.st.insert('1.0', text)
+    
+    def cleartext(self):
+        self.st.delete('1.0', 'end')
+
+    def gettext(self):
+        return self.st.get('1.0', 'end')
+    
     def new(self, *args, **kwargs):
         pass
+
+    def getfname(self):
+        self.fileloc = tkFileDialog.askopenfilename()
 
 t = textpad()
 
