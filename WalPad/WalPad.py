@@ -87,6 +87,7 @@ class textpad(tk.Tk):
         self.st.insert('INSERT', clipboard)
 
     def gluetext(self, *args):
+        global clipboard
         clipboard += self.getselected()
 
     def pastetext(self, *args):
